@@ -1,4 +1,4 @@
-# 🐦 Pigeon Core
+# 🕊️ Pigeon Core
 
 A powerful Minecraft modding framework designed to generalize core concepts, enforce cross-mod compatibility, and provide a streamlined auto-registration system.
 
@@ -41,4 +41,4 @@ Instructions on how to include Pigeon Core via Dependency Management (`build.gra
 
 ## 📄 License
 
-This project is licensed under the LGPLv3 License - see the LICENSE file for details.
+This project is licensed under the LGPLv2.1 License - see the LICENSE file for details.
