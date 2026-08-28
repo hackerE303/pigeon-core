@@ -1,0 +1,3 @@
+-cp
+src/main/java:src/main/resources
+src/main/java/software/hacker_E303/pigeon_core/client/gui/PigeAutoScreen.java

@@ -1,0 +1,31 @@
+modLoader="javafml"
+loaderVersion="[47,)"
+license="§4GNU Lesser General Public License v2.1"
+logoFile="pigeon_core.png"
+
+[[mods]]
+modId="pigeon_core"
+version="1.0.0"
+displayName="§6Pigeon Core§c"
+credits="hacker_E303"
+authors="hacker_E303"
+mixins="mixins.pigeon_core.json"
+description="""
+§aPigeon Core§8 is a modular library mod that handles the heavy lifting of Minecraft modding, so you can focus on your content. Auto registration, full gun framework, custom elements, networking and more. Everything is designed to be professional and easy to mod.
+
+§aGeckoLib§8 is supported natively for those who want advanced things.
+"""
+
+[[dependencies.pigeon_core]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1]"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.pigeon_core]]
+    modId="geckolib"
+    mandatory=false
+    versionRange="[0,)"
+    ordering="NONE"
+    side="BOTH"

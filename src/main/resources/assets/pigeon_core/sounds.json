@@ -1,0 +1,149 @@
+{
+  "gun.prev_hold": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/prev_hold",
+        "stream": false
+      }
+    ]
+  },
+  "gun.trigger": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/trigger",
+        "stream": false
+      }
+    ]
+  },
+  "gun.shell_ejection": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/shell_ejection",
+        "stream": false
+      }
+    ]
+  },
+  "ricochet": {
+    "subtitle": "subtitles.pigeon_core.ricochet",
+    "sounds": [
+      {
+        "name": "pigeon_core:misc/ricochet",
+        "stream": false
+      }
+    ]
+  },
+
+
+
+  "gun.step.light": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/light_step1",
+        "stream": false
+      },
+      {
+        "name": "pigeon_core:guns/light_step2",
+        "stream": false
+      }
+    ]
+  },
+  "gun.step.heavy": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/heavy_step1",
+        "stream": false
+      },
+      {
+        "name": "pigeon_core:guns/heavy_step2",
+        "stream": false
+      }
+    ]
+  },
+  "gun.step.fall": {
+    "sounds": [
+      {
+        "name": "pigeon_core:guns/fall_step",
+        "stream": false
+      }
+    ]
+  },
+
+
+
+  "turret.hurt": {
+    "category": "neutral",
+    "subtitle": "subtitles.pigeon_core.turret.hurt",
+    "sounds": [
+      {
+        "name": "pigeon_core:turrets/turret_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "turret.interaction": {
+    "category": "neutral",
+    "subtitle": "subtitles.pigeon_core.turret.interaction",
+    "sounds": [
+      {
+        "name": "pigeon_core:turrets/turret_interaction",
+        "stream": false
+      }
+    ]
+  },
+  "turret.rotating.yaw": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:turrets/turret_rotating_yaw",
+        "stream": false
+      }
+    ]
+  },
+  "turret.rotating.pitch_up": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:turrets/turret_rotating_pitch_up",
+        "stream": false
+      }
+    ]
+  },
+  "turret.rotating.pitch_down": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:turrets/turret_rotating_pitch_down",
+        "stream": false
+      }
+    ]
+  },
+
+  "button": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:misc/button",
+        "stream": false
+      }
+    ]
+  },
+
+  "notify_1": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:misc/notify_1",
+        "stream": false
+      }
+    ]
+  },
+  "notify_2": {
+    "category": "neutral",
+    "sounds": [
+      {
+        "name": "pigeon_core:misc/notify_2",
+        "stream": false
+      }
+    ]
+  }
+}

@@ -1,0 +1,4 @@
+FROM ornith-1.5:35b
+PARAMETER num_ctx 49152
+PARAMETER num_predict 24576
+PARAMETER temperature 0.2

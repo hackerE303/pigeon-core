@@ -1,0 +1,24 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "software.hacker_E303.pigeon_core.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "pigeon_core.refmap.json",
+  "mixins": [
+    "SpawnEggItemMixin",
+    "SynchedEntityDataMixin",
+    "ItemStackMixin",
+    "InventoryMixin",
+    "AbstractContainerMenuMixin",
+    "PlayerMixin"
+  ],
+  "client": [
+    "ItemModelShaperMixin",
+    "CreativeModeInventoryScreenMixin",
+    "AbstractContainerScreenMixin",
+    "LocalPlayerMixin"
+  ],
+  "server": [
+    "ServerPlayerMixin"
+  ]
+}

@@ -1,0 +1,26 @@
+// Script per forzare il remapping del refmap di GeckoLib
+// dopo la deobfuscazione di ForgeGradle
+
+def patchGeckoLibRefmap() {
+    def deobfDir = file("${gradle.gradleUserHomeDir}/caches/forge_gradle/deobf_dependencies/software/bernie/geckolib/geckolib-forge-1.20.1/4.8.2_mapped_official_1.20.1")
+    def jarFile = new File(deobfDir, "geckolib-forge-1.20.1-4.8.2_mapped_official_1.20.1.jar")
+    
+    if (!jarFile.exists()) {
+        println "GeckoLib deobf jar not found at ${jarFile.absolutePath}"
+        return
+    }
+    
+    println "Patching GeckoLib refmap in: ${jarFile.absolutePath}"
+    
+    // Read the refmap, replace SRG names with official names, write back
+    def process = "sh -c 'cd \"${deobfDir.absolutePath}\" && cp \"${jarFile.name}\" \"${jarFile.name}.bak\" && unzip -p \"${jarFile.name}\" geckolib.refmap.json | sed \"s|m_118506_|getTexture|g\" > /tmp/patched_refmap.json && zip -f \"${jarFile.name}\" /tmp/patched_refmap.json'".execute()
+    process.waitFor()
+    println "Exit: ${process.exitValue()}"
+}
+
+afterEvaluate {
+    // Run after deobf tasks
+    tasks.matching { it.name.contains("deobf") || it.name.contains("Deobf") }.configureEach {
+        doLast { patchGeckoLibRefmap() }
+    }
+}

@@ -1,0 +1,101 @@
+plugins {
+    id 'eclipse'
+    id 'net.minecraftforge.gradle' version '6.0.24'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+version = '1.0.0-forge-1.20.1'
+group = 'software.hacker_E303'
+archivesBaseName = 'pigeon_core'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    copyIdeResources = true
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                pigeon_core {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                pigeon_core {
+                    source sourceSets.main
+                }
+            }
+    }
+}
+
+// Keep the Mixin refmap in the mod resources so it ships inside the jar. The
+// annotation processor emits it under build/tmp/compileJava; without it present
+// in the resources, Mixin silently disables every mixin of this mod.
+tasks.register('syncMixinRefmap', Copy) {
+    dependsOn tasks.named('compileJava')
+    from("$buildDir/tmp/compileJava/pigeon_core.refmap.json")
+    into("$buildDir/resources/main")
+    onlyIf { file("$buildDir/tmp/compileJava/pigeon_core.refmap.json").exists() }
+}
+
+tasks.named('processResources') {
+    finalizedBy 'syncMixinRefmap'
+}
+
+}
+
+mixin {
+    add sourceSets.main, "pigeon_core.refmap.json"
+    config 'mixins.pigeon_core.json'
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += [
+        '-parameters',
+        '-Xlint:-cast',
+        '-Xlint:-unchecked',
+        '-Xlint:-deprecation'
+    ]
+}
+
+tasks.named('jar', Jar) {
+    archiveBaseName = project.archivesBaseName
+    archiveVersion = project.version
+    dependsOn 'syncMixinRefmap'
+    
+    manifest {
+        attributes([
+            "Specification-Title": "pigeon_core",
+            "Specification-Vendor": "hacker_E303",
+            "Specification-Version": "1",
+            "Implementation-Title": project.name,
+            "Implementation-Version": project.version,
+            "Implementation-Vendor" :"hacker_E303",
+        ])
+    }
+    
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
