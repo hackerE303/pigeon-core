@@ -18,3 +18,7 @@ Thumbs.db
 
 # Gradle
 .gradle/
+
+# Stray build artifacts / local IDE/agent configs
+*.args
+.claude/
