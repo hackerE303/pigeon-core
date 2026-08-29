@@ -1,6 +1,6 @@
 # Pigeon Core
 
-Pigeon Core is a **library mod** for Minecraft Forge **1.20.1**. It provides:
+Pigeon Core is a **framework mod** for Minecraft Forge **1.20.1**. It provides:
 
 - auto registration of items, entities and block entities (`RegisterFactory`),
 - a gun framework (muzzles, attachments, magazines, reload/hold actions, shells, bullet holes),
