@@ -109,7 +109,7 @@ dependencies {
 }
 ```
 
-## ⚠️ GeckoLib refmap gotcha (dev environment only)
+## GeckoLib refmap gotcha (dev environment only)
 
 If your mod also uses GeckoLib directly and Mixin, the ForgeGradle deobfuscated
 GeckoLib 4.8.2 jar in the local dev cache has a **broken Mixin refmap**: the
@@ -127,31 +127,7 @@ apply from: '/path/to/pigeon_core/fix_geckolib_refmap.gradle'
 
 It patches the deobfuscated GeckoLib jar in `~/.gradle/caches/forge_gradle/`
 in place after deobfuscation completes. No action is needed for players
-running the production mod file.
-
-## Building & publishing (maintainers)
-
-```sh
-# local build
-./gradlew clean build
-
-# publish to the local Maven repository (~/.m2) — no credentials needed
-./gradlew publishToMavenLocal
-
-# publish to GitHub Packages (free) — requires the token in the environment
-GITHUB_USERNAME=hacker_E303 GITHUB_TOKEN=*** \
-    ./gradlew publish
-```
-
-The published POM contains:
-
-- coordinates `software.hacker_E303:pigeon_core:1.0.0-forge-1.20.1`, plus the
-  `-sources` and `-javadoc` artifacts,
-- the `api` transitive dependency
-  `software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2`,
-- license **LGPL 2.1** and SCM `https://github.com/hacker_E303/pigeon_core`.
-
-Consumers must also keep the GeckoLib Cloudsmith repository in their own
+running the production mod file. Consumers must also keep the GeckoLib Cloudsmith repository in their own
 `repositories` block so the transitive GeckoLib dependency resolves.
 No deobfuscation of this jar is required by consumers.
 
