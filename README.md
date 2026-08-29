@@ -18,8 +18,6 @@ Pigeon Core is a **framework mod** for Minecraft Forge **1.20.1**. It provides:
 | License | LGPL 2.1 (see [LICENSE](LICENSE)) |
 | Coordinates | `software.hacker_E303:pigeon_core:1.0.0-forge-1.20.1` |
 
----
-
 ## Using it in a consumer mod (Gradle)
 
 The published artifact is a **deobfuscated** jar. Consumers **never** decompile
@@ -111,8 +109,6 @@ dependencies {
 }
 ```
 
----
-
 ## ⚠️ GeckoLib refmap gotcha (dev environment only)
 
 If your mod also uses GeckoLib directly and Mixin, the ForgeGradle deobfuscated
@@ -161,8 +157,6 @@ Consumers must also keep the GeckoLib Cloudsmith repository in their own
 `repositories` block so the transitive GeckoLib dependency resolves.
 No deobfuscation of this jar is required by consumers.
 
----
-
 ## Project layout
 
 | Package | Content |
@@ -180,8 +174,6 @@ No deobfuscation of this jar is required by consumers.
 | `...pigeon_core.main.event.network.*` | all packet classes + `RouterUtils` |
 | `...pigeon_core.util` | `BetterMath`, `BetterTexts`, `BetterData`, `PigeUtils`, world/locator utils |
 | `...pigeon_core.item` | `EGun` (item form), `EMagazine`, `EItem` base |
-
----
 
 ## License
 
