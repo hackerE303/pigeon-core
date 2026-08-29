@@ -25,7 +25,7 @@ or deobfuscate it: Maven handles the metadata, and GeckoLib (the only external
 Minecraft dependency) is re-deobfuscated by *the consumer's* ForgeGradle from
 public Maven coordinates — exactly the same as any other Mod dependency.
 
-### `settings.gradle`
+## `settings.gradle`
 
 ```groovy
 pluginManagement {
@@ -42,7 +42,7 @@ plugins {
 rootProject.name = 'my_mod'
 ```
 
-### `build.gradle`
+## `build.gradle`
 
 ```groovy
 plugins {
@@ -128,8 +128,6 @@ apply from: '/path/to/pigeon_core/fix_geckolib_refmap.gradle'
 It patches the deobfuscated GeckoLib jar in `~/.gradle/caches/forge_gradle/`
 in place after deobfuscation completes. No action is needed for players
 running the production mod file.
-
----
 
 ## Building & publishing (maintainers)
 
