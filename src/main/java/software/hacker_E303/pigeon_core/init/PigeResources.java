@@ -1,10 +1,5 @@
 package software.hacker_E303.pigeon_core.init;
 
-import net.minecraft.world.entity.MobCategory;
-import software.hacker_E303.pigeon_core.common.Tab;
-import software.hacker_E303.pigeon_core.entity.common.stats.InitStats;
-import software.hacker_E303.pigeon_core.entity.common.spawn.SpawnPlace;
-import software.hacker_E303.pigeon_core.entity.common.spawn.SpawnDefinition;
 import software.hacker_E303.pigeon_core.main.EResources;
 import software.hacker_E303.pigeon_core.util.locator.MultiLocation;
 import software.hacker_E303.pigeon_core.util.locator.Path;
@@ -21,8 +16,6 @@ public final class PigeResources extends EResources {
      */
     @Override
     public void registerTabs(TabContext ctx) {
-
-        ctx.add(Tab.create("pigeon_core", "test_item", "test_turret").isCreative("test_item"));
     }
 
     /**
@@ -52,10 +45,6 @@ public final class PigeResources extends EResources {
      */
     @Override
     public void registerEntityStats(EntityStatsContext ctx) {
-        
-        ctx.add(
-            InitStats.create("test_turret").turret().health(10)
-                .boundingBox(2, 10, 5, 7).shootRange(400));
     }
 
     /**
@@ -65,10 +54,6 @@ public final class PigeResources extends EResources {
      */
     @Override
     public void registerEntitySpawns(EntitySpawnsContext ctx) {
-        ctx.add(SpawnPlace.create("test_turret").define(
-            SpawnDefinition.create("plains").min(1).max(2).weight(5000000),
-            SpawnDefinition.create("#minecraft:underground").min(6).max(7).weight(3).category(MobCategory.MISC)
-        ));
     }
 
     /**

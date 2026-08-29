@@ -240,7 +240,7 @@ public abstract class EBullet extends AbstractArrow {
     }
 
     @Override
-    public final void tick() {
+    public void tick() {
 
         Vec3 prevPos = this.position();
         super.tick();
@@ -296,22 +296,26 @@ public abstract class EBullet extends AbstractArrow {
         switch (this.getImpactReaction(result.getBlockPos())) {
 
             case STOP:
+                if (!this.handleImpactWallHole()) break;
                 RouterUtils.Internal.spawnBulletHole(pos, this.level(), face);
                 this.spawnImpactParticles(pos, face);
                 this.discard();
                 break;
 
             case RICOCHET:
+                if (!this.handleImpactRicochet()) break;
                 this.spawnRicochetParticles(pos, face);
                 this.discard();
                 break;
 
             case PENETRATE:
+                if (!this.handleImpactGlassBreaking()) break;
                 this.level().destroyBlock(result.getBlockPos(), false);
                 this.direction = this.direction.scale(0.6f);
                 break;
 
             case FOLIAGE:
+                if (!this.handleFoliagePenetration()) break;
                 this.onFoliage = true;
                 this.setNoPhysics(true);
                 break;
@@ -392,6 +396,22 @@ public abstract class EBullet extends AbstractArrow {
             return ImpactReaction.FOLIAGE;
         }
         return ImpactReaction.STOP;
+    }
+
+    public boolean handleImpactWallHole() {
+        return false;
+    }
+
+    public boolean handleImpactRicochet() {
+        return false;
+    }
+
+    public boolean handleImpactGlassBreaking() {
+        return false;
+    }
+
+    public boolean handleFoliagePenetration() {
+        return false;
     }
 
     /**
@@ -494,7 +514,7 @@ public abstract class EBullet extends AbstractArrow {
             }
         }
         if (leftOwner == null)
-        throw new RuntimeException("Error occurred trying to access at 'leftOwner' field on class Bullet.java!");
+        throw new RuntimeException("Error occurred trying to access at 'leftOwner' field on class EBullet.java!");
 
         for (Field field : AbstractArrow.class.getDeclaredFields()) {
             if (field.getType() == IntOpenHashSet.class && piercingField == null) {
@@ -509,7 +529,7 @@ public abstract class EBullet extends AbstractArrow {
             }
         }
         if (piercingField == null || killedField == null)
-        throw new RuntimeException("Error occurred trying to access at 'piercing' field on class Bullet.java!");
+        throw new RuntimeException("Error occurred trying to access at 'piercing' field on class EBullet.java!");
 
 		LEFT_OWNER_FIELD = leftOwner;
         PIERCING_IGNORE_ENTITY_IDS_FIELD = piercingField;

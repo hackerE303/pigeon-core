@@ -1,5 +1,5 @@
-// Script per forzare il remapping del refmap di GeckoLib
-// dopo la deobfuscazione di ForgeGradle
+// Script to force remapping of GeckoLib's refmap
+// after ForgeGradle deobfuscation
 
 def patchGeckoLibRefmap() {
     def deobfDir = file("${gradle.gradleUserHomeDir}/caches/forge_gradle/deobf_dependencies/software/bernie/geckolib/geckolib-forge-1.20.1/4.8.2_mapped_official_1.20.1")

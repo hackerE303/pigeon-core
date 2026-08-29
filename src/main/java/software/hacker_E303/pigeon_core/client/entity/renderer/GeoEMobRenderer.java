@@ -22,9 +22,18 @@ public class GeoEMobRenderer<T extends GeoEMob> extends GeoEntityRenderer<T> {
         super(context, new Model<>());
     }
 
+    /**
+     * Render type for the GeoLib entity.
+     *
+     * @param animatable       the animatable entity
+     * @param texture          the texture resource (unused; we resolve directly from the entity)
+     * @param bufferSource     the buffer source
+     * @param partialTick      the partial tick
+     * @return the render type
+     */
     @Override
     public RenderType getRenderType(T animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-        return RenderType.entityTranslucent(getTextureLocation(animatable));
+        return RenderType.entityTranslucent(((GeoEMob) animatable).getTextureLocation());
     }
 
     @Override

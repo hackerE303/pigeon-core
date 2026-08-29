@@ -1,4 +1,6 @@
 plugins {
+    id 'java-library'
+    id 'maven-publish'
     id 'eclipse'
     id 'net.minecraftforge.gradle' version '6.0.24'
     id 'org.spongepowered.mixin' version '0.7.+'
@@ -9,6 +11,18 @@ group = 'software.hacker_E303'
 archivesBaseName = 'pigeon_core'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+// Library mod: publish a sources jar and a javadoc jar alongside the main jar.
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+// The deobfuscated Minecraft API triggers a huge amount of doclint warnings;
+// suppress them so the javadoc jar does not drown in (or fail on) vanilla noise.
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
 
 minecraft {
     mappings channel: 'official', version: '1.20.1'
@@ -34,23 +48,20 @@ minecraft {
                     source sourceSets.main
                 }
             }
+        }
     }
 }
 
-// Keep the Mixin refmap in the mod resources so it ships inside the jar. The
+// Keep the Mixin refmap in the jar root so it ships inside the jar. The
 // annotation processor emits it under build/tmp/compileJava; without it present
-// in the resources, Mixin silently disables every mixin of this mod.
+// in the jar, Mixin silently disables every mixin of this mod.
+// NOTE: it MUST NOT be written into build/resources/main (shared input of
+// processResources / javadoc / jar), or Gradle fails its task-graph validation.
 tasks.register('syncMixinRefmap', Copy) {
     dependsOn tasks.named('compileJava')
     from("$buildDir/tmp/compileJava/pigeon_core.refmap.json")
-    into("$buildDir/resources/main")
+    into "$buildDir/mixinRefmap"
     onlyIf { file("$buildDir/tmp/compileJava/pigeon_core.refmap.json").exists() }
-}
-
-tasks.named('processResources') {
-    finalizedBy 'syncMixinRefmap'
-}
-
 }
 
 mixin {
@@ -67,7 +78,29 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2')
+
+    // GeckoLib types (GeoItem, GeoEntity, AnimationState, ...) appear in our
+    // PUBLIC API (EGun, GeoEMob, EAttachment, AnimUseEvent.test, GeoController),
+    // so consumers need it in compile scope -> `api`, not `implementation`.
+    //
+    // fg.deobf() is the STANDARD GeckoLib-forge consumption pattern (see the
+    // GeckoLib docs: "additionally, to allow for decompilation and
+    // deobfuscation, add fg.deobf(...)"). Verified at the bytecode level: the
+    // RAW jar published on Cloudsmith is a MIX — GeckoLib's own API has
+    // official names, but its internal calls into Minecraft still use SRG
+    // names (e.g. GeoEntityRenderer's texture delegate references m_5478_),
+    // so it cannot be used directly on a consumer's compile classpath. Every
+    // Forge consumer of GeckoLib therefore runs its own ForgeGradle to
+    // deobfuscate the RAW 4.8.2 jar (fetched from Cloudsmith) into the
+    // *_mapped_official_1.20.1* variant — the exact coordinate carried in this
+    // POM, consistent with every other GeckoLib-consuming mod that publishes.
+    //
+    // DO NOT "simplify" this to the plain '4.8.2' coordinate: it compiles fine
+    // HERE only because FG deobfuscates our own local copy, and it publishes a
+    // non-resolvable dependency for consumers (Cloudsmith serves 404 for the
+    // mapped coordinate; the plain SRG-mixed jar cannot be compile-targeted).
+    api fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.8.2')
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
@@ -85,7 +118,9 @@ tasks.named('jar', Jar) {
     archiveBaseName = project.archivesBaseName
     archiveVersion = project.version
     dependsOn 'syncMixinRefmap'
-    
+    // Include the refmap at the jar root (mixin expects it there).
+    from("$buildDir/mixinRefmap")
+
     manifest {
         attributes([
             "Specification-Title": "pigeon_core",
@@ -98,4 +133,71 @@ tasks.named('jar', Jar) {
     }
     
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// ---------------------------------------------------------------------------
+// Publishing
+//
+//   ./gradlew publishToMavenLocal                 -> ~/.m2/repository/...
+//   GITHUB_USERNAME=hackerE303 GITHUB_TOKEN=*** ./gradlew publish
+//                                                  -> GitHub Packages (free)
+//
+// Consumers then simply declare:
+//   api 'software.hacker_E303:pigeon_core:1.0.0-forge-1.20.1'
+// ---------------------------------------------------------------------------
+publishing {
+    publications {
+        release(MavenPublication) {
+            // from components.java -> publishes main jar + sources + javadoc jars
+            from components.java
+
+            groupId = project.group                // software.hacker_E303
+            artifactId = project.archivesBaseName // pigeon_core
+            version = project.version              // 1.0.0-forge-1.20.1
+
+            pom {
+                name = 'Pigeon Core'
+                description = '''
+                    Pigeon Core is a library mod for Minecraft Forge 1.20.1:
+                    auto registration, gun and item frameworks, a GUI toolkit,
+                    networking helpers, and first-class GeckoLib 4.8.2 support.
+                '''.stripIndent()
+                url = 'https://github.com/hackerE303/pigeon-core'
+
+                licenses {
+                    license {
+                        name = 'GNU Lesser General Public License v2.1'
+                        url = 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'hackerE303'
+                        name = 'hackerE303'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:git:git://github.com/hackerE303/pigeon-core.git'
+                    url = 'https://github.com/hackerE303/pigeon-core'
+                }
+            }
+        }
+    }
+
+    repositories {
+        mavenLocal()
+
+        // GitHub Packages (free; repo will be public).
+        // Requires GITHUB_USERNAME + GITHUB_TOKEN when publishing.
+        maven {
+            name = 'githubPackages'
+            url = uri('https://maven.pkg.github.com/hackerE303/pigeon-core')
+            credentials {
+                username = System.getenv('GITHUB_USERNAME') ?: 'hackerE303'
+                password = System.getenv('GITHUB_TOKEN')
+            }
+        }
+    }
 }

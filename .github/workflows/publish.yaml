@@ -1,0 +1,37 @@
+name: Publish to GitHub Packages
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write   # lets the job push artifacts to github.com/hackerE303/pigeon-core (Packages)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache Gradle (incl. ForgeGradle / Minecraft decompile)
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-user-home: /home/runner/work/_temp/gradle
+          cache-read-only: false
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Publish to GitHub Packages
+        run: ./gradlew publish --no-daemon --stacktrace
+        env:
+          GITHUB_USERNAME: hackerE303
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # automatic, scoped by the `permissions:` block above
