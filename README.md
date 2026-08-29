@@ -116,9 +116,7 @@ GeckoLib 4.8.2 jar in the local dev cache has a **broken Mixin refmap**: the
 refmap entry for `TextureManager#getTexture` points at an SRG name
 (`m_118506_`) that does not exist in the deobfuscated bytecode, so GeckoLib's
 `TextureManagerMixin` silently fails to apply in the dev client. It works in
-production (production GeckoLib is still obfuscated, so the refmap there is fine).
-
-This project ships a dev-time fix, `fix_geckolib_refmap.gradle`:
+production (production GeckoLib is still obfuscated, so the refmap there is fine). This project ships a dev-time fix, `fix_geckolib_refmap.gradle`:
 
 ```groovy
 // inside the CONSUMER project's build.gradle (same machine that built pigeon_core):
