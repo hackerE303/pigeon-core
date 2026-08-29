@@ -25,7 +25,7 @@ or deobfuscate it: Maven handles the metadata, and GeckoLib (the only external
 Minecraft dependency) is re-deobfuscated by *the consumer's* ForgeGradle from
 public Maven coordinates — exactly the same as any other Mod dependency.
 
-## `settings.gradle`
+**`settings.gradle`**
 
 ```groovy
 pluginManagement {
@@ -42,7 +42,7 @@ plugins {
 rootProject.name = 'my_mod'
 ```
 
-## `build.gradle`
+**`build.gradle`**
 
 ```groovy
 plugins {
@@ -161,11 +161,7 @@ No deobfuscation of this jar is required by consumers.
 |---|---|
 | `software.hacker_E303.pigeon_core` | `PigeonCore` (mod entry), `RegisterFactory`, `EResources` |
 | `...pigeon_core.actions` | gun behaviors (`IShoot`, `IReload`, `IBasic`, `IGratherEvent`, `IGeneration`) |
-| `...pigeon_core.client.gui` | `PigeConfigScreen`, sliders, checkboxes, text fields, … |
-| `...pigeon_core.client.gun` | gun animation and rendering |
-| `...pigeon_core.client.item` | item atlas / model handlers |
-| `...pigeon_core.client.entity` | `AnimalGeo`, renderers |
-| `...pigeon_core.common.config` | `ConfigContext`, `ConfigEntry`, `ConfigFolder`, … |
+| `...pigeon_core.common` | `PigeConfig`, `PigeGui`, `Tab`, … |
 | `...pigeon_core.geo` | `EGun`, `GeoEMob`, `EAttachment`, `GeoController`, … |
 | `...pigeon_core.mixins` | Mixin targets (inventory, item stack, spawn egg, …) |
 | `...pigeon_core.main` | `AutoRegister`, event handlers, `PigeNetworking` |
